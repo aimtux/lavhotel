@@ -26,6 +26,25 @@ Route::get('/', function () {
 |
 */
 
-Route::group(['middleware' => ['web']], function () {
-    //
+Route::group(['prefix' => 'admin','middleware' => ['web', 'auth']], function () {
+	Route::get('/', function(){
+		return view ('admin.index');
+	});
+
+	/*Reservation Route*/
+	    Route::get('pesan', 'PesanController@index');
+	    Route::post('pesan', 'PesanController@validation');
+	    Route::post('pesan/store', 'PesanController@store');
+	    Route::get('pesan/{pesan}', 'PesanController@showDetail');
+	    Route::get('pesan/{pesan}/create', 'PesanController@create');
+	    Route::post('pesan/{pesan}/', 'PesanController@storeData');
+    /*Reservation Route*/
+
+    Route::resource('customer', 'CustomerController');
+});
+
+Route::group(['middleware' => 'web'], function () {
+    Route::auth();
+
+    Route::get('/home', 'HomeController@index');
 });
